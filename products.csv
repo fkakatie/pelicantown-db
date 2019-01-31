@@ -1,13 +1,12 @@
-﻿ID,PRODUCT,DEPARTMENT,PRICE,STOCK
-1,Bait,Fish Shop,0.50,9999
+﻿1,Bait,Fish Shop,0.50,9999
 2,Bamboo Pole,Fish Shop,50.00,500
 3,Crab Pot,Fish Shop,150.00,300
 4,Trout Soup,Fish Shop,2.50,250
-5,Cauliflower Seeds,General Store,8.00,1200
-6,Pumpkin Seeds,General Store,10.00,1300
-7,Tomato Seeds,General Store,5.00,1100
-8,Tulip Bulb,General Store,2.00,600
-9,Chicken,Marnie's Ranch,80.00,36
-10,Cow,Marnie's Ranch,1500.00,24
-11,Pig,Marnie's Ranch,1600.00,12
-12,Sheep,Marnie's Ranch,800.00,12
+5,Cauliflower Seeds,General Store,0.80,1200
+6,Pumpkin Seeds,General Store,1.00,1300
+7,Tomato Seeds,General Store,0.50,1100
+8,Tulip Bulb,General Store,0.20,600
+9,Chicken,The Ranch,80.00,36
+10,Cow,The Ranch,1500.00,24
+11,Pig,The Ranch,1600.00,12
+12,Sheep,The Ranch,800.00,12

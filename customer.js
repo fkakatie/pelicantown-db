@@ -4,12 +4,11 @@ var my = require('./my.js');
 
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-var chalk = require('chalk');
-// var {table} = require('table');
+
+// table setup
 var {createStream} = require('table');
 var {getBorderCharacters} = require('table');
 
-// table setup
 let config,
     stream;
  
@@ -21,24 +20,18 @@ config = {
     },
     columnCount: 4,
     columns: {
-        0: {
-            width: 2
-        },
-        1: {
-            alignment: 'left',
-        },
-        2: {
-            width: 7
-        },
-        3: {
-            width: 5
-        }
+        0: {width: 2},
+        1: {alignment: 'left'},
+        2: {width: 7},
+        3: {width: 5}
     }
 };
  
 stream = createStream(config);
 
 // chalk setup
+var chalk = require('chalk');
+
 var heading = chalk.bold.blue;
 var bgheading = chalk.bold.yellow.bgBlue;
 var bold = chalk.bold;
