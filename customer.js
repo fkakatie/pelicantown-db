@@ -1,6 +1,7 @@
 // required packages
 require('dotenv').config();
 var my = require('./my.js');
+var manager = require('./manager.js');
 
 var mysql = require('mysql');
 var inquirer = require('inquirer');
@@ -56,7 +57,7 @@ var heading = chalk.bold.cyan;
 var bgheading = chalk.bold.yellow.bgBlue;
 var bold = chalk.bold;
 var muted = chalk.gray;
-var bad = chalk.bold.yellow;
+var bad = chalk.bold.magenta;
 var inverse = chalk.inverse;
 
 // shopping cart variables
