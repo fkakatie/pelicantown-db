@@ -1,7 +1,6 @@
 // required packages
 require('dotenv').config();
 var my = require('./my.js');
-var manager = require('./manager.js');
 
 var mysql = require('mysql');
 var inquirer = require('inquirer');
@@ -47,8 +46,6 @@ totalConfig = {
         1: {width: 11}
     }
 }
- 
-stream = createStream(config);
 
 // chalk setup
 var chalk = require('chalk');
@@ -66,6 +63,10 @@ var cartTotal = 0.00;
 var shoppingCart = [
     [bold('PRODUCT'), bold('QUANTITY'), bold('PRICE')]
 ];
+
+// password variables
+var managerAccount = false;
+var incorrectGuesses = 0;
 
 // create connection
 var connection = mysql.createConnection({
@@ -94,6 +95,8 @@ function intro() {
 
 function displayProducts() {
 
+    stream = createStream(config);
+
     stream.write([
         bold('ID'), 
         bold('PRODUCT'), 
@@ -101,7 +104,7 @@ function displayProducts() {
         bold('STOCK')
     ]);
 
-    connection.query('SELECT * FROM pelicantown.products;', function (err, res) {
+    connection.query('SELECT * FROM pelicantown.products', function (err, res) {
 
         if (err) throw err;
 
@@ -120,7 +123,7 @@ function displayProducts() {
 
         console.log('\n');
 
-        accountType();
+        managerAccount ? continueMgmt() : accountType();
 
     })
 
@@ -132,7 +135,7 @@ function accountType() {
         name: 'type',
         type: 'rawlist',
         message: 'Select your account type:',
-        choices: ['Customer', 'Manager', 'Supervisor']
+        choices: ['Customer', 'Manager']
     }]).then(function(account) {
 
         switch (account.type) {
@@ -140,10 +143,7 @@ function accountType() {
                 customerFunc();
                 break;
             case 'Manager':
-                managerFunc();
-                break;
-            case 'Supervisor':
-                supervisorFunc();
+                validateManager();
                 break;
             default:
                 break;
@@ -326,5 +326,262 @@ function checkout() {
     console.log('Thank you for shopping local in Stardew Valley!');
 
     connection.end();
+
+}
+
+function validateManager() {
+
+    inquirer.prompt([{
+        name: 'word',
+        type: 'password',
+        message: 'Enter the manager password:',
+        mask: true
+    }]).then(function(pass) {
+
+        if (pass.word === 'managerpass') {
+
+            incorrectGuesses = 0;
+
+            console.log(bold('\nWELCOME TO MANAGER VIEW!'));
+
+            managerFunc();
+
+            managerAccount = true;
+
+        } else if (incorrectGuesses == 2) {
+
+            incorrectGuesses = 0;
+
+            console.log(bad('\nToo many failed attempts.'));
+            console.log('Please try again later.');
+
+            intro();
+
+        } else {
+
+            incorrectGuesses++;
+
+            console.log(bad('\nIncorrect password.'));
+            console.log('Try again.\n');
+
+            validateManager();
+
+        }
+
+
+    })
+
+}
+
+function managerFunc() {
+
+    console.log('');
+
+    readProducts(function(productArr) {
+
+        inquirer.prompt([{
+            name: 'selection',
+            type: 'rawlist',
+            message: 'What would you like to do?',
+            choices: [
+                'View products for sale', 
+                'View low inventory', 
+                'Update inventory', 
+                'Add new product']
+        }]).then(function(manager) {
+            
+        switch (manager.selection) {
+            case 'View products for sale':
+                displayProducts();
+                break;
+            case 'View low inventory':
+                lowInventory();
+                break;
+            case 'Update inventory':
+                increaseStock();
+                break;
+            case 'Add new product':
+                addNewProduct();
+                break;
+            default:
+                break;
+        }
+
+        })
+
+    })
+
+}
+
+function lowInventory() {
+
+    stream = createStream(config);
+
+    stream.write([
+        bold('ID'), 
+        bold('PRODUCT'), 
+        bold('PRICE'), 
+        bold('STOCK')
+    ]);
+
+    connection.query('SELECT * FROM pelicantown.products HAVING stock < 50 ORDER BY stock DESC', function (err, res) {
+
+        if (err) throw err;
+
+        for (var i = 0; i < res.length; i++) {
+
+            // console.log(res);
+
+            stream.write([
+                res[i].id, 
+                heading(res[i].product), 
+                res[i].price.toFixed(2), 
+                res[i].stock
+            ]);
+
+        }
+
+        console.log('\n');
+
+        continueMgmt();
+
+    })
+
+}
+
+function increaseStock() {
+
+    readProducts(function(productArr) {
+
+        inquirer.prompt([{
+            name: 'name',
+            type: 'list',
+            message: 'Which item would you like to order more of?',
+            choices: productArr
+        }, {
+            name: 'quantity',
+            type: 'input',
+            message: 'How many?',
+            validate: function(value) {
+                if (value.trim().length == 0 || isNaN(value) || value < 0) {
+                    return false;
+                }
+                return true;
+            }
+        }]).then(function(product) {
+
+            var item = product.name;
+            var quantity = Number(product.quantity);
+            
+            connection.query('SELECT * FROM pelicantown.products WHERE product = "' + item + '"', function (err, res) {
+
+                if (err) throw err;
+
+                var stock = Number(res[0].stock);
+
+                var newStock = stock + quantity;
+
+                connection.query('UPDATE pelicantown.products SET stock = ' + newStock + ' WHERE product = "' + item + '"', function (err, res) {
+
+                    if (err) throw err;
+
+                    console.log('\n' +
+                        bold(quantity + ' ' + item) + ' added to store!'
+                    );
+
+                    continueMgmt();
+
+                })
+        
+            })
+
+        })
+
+    })
+
+}
+
+function addNewProduct() {
+
+    inquirer.prompt([{
+        name: 'name',
+        type: 'input',
+        message: 'What would you like to add?'
+    }, {
+        name: 'department',
+        type: 'list',
+        message: 'Into which department?',
+        choices: ['Fish Shop', 'General Store', 'The Ranch']
+    }, {
+        name: 'price',
+        type: 'input',
+        message: 'What does each item cost?',
+        validate: function(value) {
+            if (value.trim().length == 0 || isNaN(value) || value < 0) {
+                return false;
+            }
+            return true;
+        }
+    }, {
+        name: 'stock',
+        type: 'input',
+        message: 'How many would you like to add?',
+        validate: function(value) {
+            if (value.trim().length == 0 || isNaN(value) || value < 0) {
+                return false;
+            }
+            return true;
+        }
+    }]).then(function(product) {
+
+        var item = product.name;
+        var dept = product.department;
+        var price = product.price.toFixed(2);
+        var stock = product.stock;
+
+        var values = '"' + 
+            item + '","' + 
+            dept + '",' + 
+            price + ',' + 
+            stock + '';
+
+        connection.query('INSERT INTO pelicantown.products (product, department, price, stock) VALUES (' + values + ')', function (err, res) {
+
+            if (err) throw err;
+    
+            console.log('\n' +
+                            bold(stock + ' ' + item) + ' added to store!'
+                        );
+
+            continueMgmt();
+    
+        })
+
+    })
+
+}
+
+function continueMgmt() {
+
+    inquirer.prompt([{
+        name: 'choice',
+        type: 'list',
+        message: ' ',
+        choices: ['Return to manager options', 'Log out']
+    }]).then(function(res) {
+
+        switch (res.choice) {
+            case 'Return to manager options':
+                managerFunc();
+                break;
+            case 'Log out':
+                console.log('\nThank you for visiting Stardew Valley!');
+                connection.end();
+                break;
+            default:
+                break;
+        }
+
+    })
 
 }
