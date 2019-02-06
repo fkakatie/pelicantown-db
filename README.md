@@ -39,15 +39,11 @@ This project requires [`npm`](https://www.npmjs.com) to install third party libr
 ![Customer Account](https://github.com/fkakatie/pelicantown-db/blob/master/images/02-customer.gif)
 
 - **Manager Account:**
-    - After entering the manager password, select a manager function:
-      - _View products for sale_ will display all store products.
-      ![View products for sale](https://github.com/fkakatie/pelicantown-db/blob/master/images/03-managerview.gif)
-      - _View low inventory_ will display all products will less than 50 stock.
-      ![View low inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/04-managerlow.gif)
-      - _Update inventory_ will allow manager to increase the current stock of any item.
-      ![Update inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/05-managerupdate.gif)
-      - _Add new product_ will allow manager to add a new product to the store.
-      ![Add new product](https://github.com/fkakatie/pelicantown-db/blob/master/images/06-manageradd.gif)
+
+View products for sale | View low inventory | Update inventory | Add new product
+-----------------------|--------------------|------------------|----------------
+displays all store products | displays all products with less than 50 stock | increases the current stock of any item | adds a new product to the store
+![View products for sale](https://github.com/fkakatie/pelicantown-db/blob/master/images/03-managerview.gif) | ![View low inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/04-managerlow.gif) | ![Update inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/05-managerupdate.gif) | ![Add new product](https://github.com/fkakatie/pelicantown-db/blob/master/images/06-manageradd.gif)
 
 ## Where users can get help with this project ## 
 
