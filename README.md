@@ -24,8 +24,10 @@ This project requires [`npm`](https://www.npmjs.com) to install third party libr
 1. **Setup and start the app.**
     - Create a `node_modules` directory by entering `npm i` in the command line.
     - Enter `node storefront` in the command line to start the app.
+    
+![Start the app](https://github.com/fkakatie/pelicantown-db/blob/master/images/01-storefront.gif)
 	
-3. **Select your account type.**
+2. **Select your account type.**
     - Customers can purchase products from the store.
     - Managers can get specific information about the store's inventory and even order more product (manager account requires password).
 
@@ -34,16 +36,22 @@ This project requires [`npm`](https://www.npmjs.com) to install third party libr
     - Add as many products to your cart as you would like! 
     - When you are done shopping, begin checkout. Your cart inventory and cart total will display in the console.
 
+![Customer Account](https://github.com/fkakatie/pelicantown-db/blob/master/images/02-customer.gif)
+
 - **Manager Account:**
     - After entering the manager password, select a manager function:
       - _View products for sale_ will display all store products.
+      ![View products for sale](https://github.com/fkakatie/pelicantown-db/blob/master/images/03-managerview.gif)
       - _View low inventory_ will display all products will less than 50 stock.
+      ![View low inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/04-managerlow.gif)
       - _Update inventory_ will allow manager to increase the current stock of any item.
+      ![Update inventory](https://github.com/fkakatie/pelicantown-db/blob/master/images/05-managerupdate.gif)
       - _Add new product_ will allow manager to add a new product to the store.
+      ![Add new product](https://github.com/fkakatie/pelicantown-db/blob/master/images/06-manageradd.gif)
 
 ## Where users can get help with this project ## 
 
-A video tutorial will be available soon, but if you have any further questions about this project, visit my portfolio and [send me a message](https://fkakatie.github.io/responsive-portfolio/contact.html).
+If you have any questions about this project, visit my portfolio and [send me a message](https://fkakatie.github.io/responsive-portfolio/contact.html).
 
 ## Who maintains this project ##
 
