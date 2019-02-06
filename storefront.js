@@ -32,7 +32,7 @@ staticConfig = {
     border: getBorderCharacters(`norc`),
     columnDefault: {alignment: 'right'},
     columns: {
-        0: {width: 30, alignment: 'left'},
+        0: {width: 29, alignment: 'left'},
         1: {width: 8},
         2: {width: 10}
     }
@@ -110,8 +110,6 @@ function displayProducts() {
 
         for (var i = 0; i < res.length; i++) {
 
-            // console.log(res);
-
             stream.write([
                 res[i].id, 
                 heading(res[i].product), 
@@ -133,7 +131,7 @@ function accountType() {
 
     inquirer.prompt([{
         name: 'type',
-        type: 'rawlist',
+        type: 'list',
         message: 'Select your account type:',
         choices: ['Customer', 'Manager']
     }]).then(function(account) {
@@ -168,7 +166,7 @@ function readProducts(callback) {
 
         callback(productArr);
         
-       });
+    });
 
 }
 
@@ -430,8 +428,6 @@ function lowInventory() {
 
         for (var i = 0; i < res.length; i++) {
 
-            // console.log(res);
-
             stream.write([
                 res[i].id, 
                 heading(res[i].product), 
@@ -536,7 +532,7 @@ function addNewProduct() {
 
         var item = product.name;
         var dept = product.department;
-        var price = product.price.toFixed(2);
+        var price = product.price;
         var stock = product.stock;
 
         var values = '"' + 
